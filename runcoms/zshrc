@@ -1,9 +1,5 @@
 #
 # Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
@@ -11,3 +7,13 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+
+alias reload!='source ~/.zshrc'
+
+# source all .zsh files inside of the zsh/ directory
+for config (${ZDOTDIR:-$HOME}/.zprezto/runcoms/custom/**/*.zsh) source $config
+
+if [[ -a ~/.localrc ]]; then
+    source ~/.localrc
+fi
+
