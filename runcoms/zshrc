@@ -27,4 +27,9 @@ alias ssh='TERM=xterm-256color ssh'
 # so define an alias to get back to bash with it
 # and be presented directly with the alice-env.conf menu
 
-alias legacy="bash --init-file $HOME/Scripts/bash_profile.old"
+#alias legacy="bash --init-file $HOME/Scripts/bash_profile.old"
+alias legacy="$HOME/Scripts/aliroot-legacy"
+
+export PATH=$PATH:$HOME/bin
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
