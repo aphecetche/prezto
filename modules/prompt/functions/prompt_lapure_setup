@@ -350,11 +350,9 @@ prompt_lapure_setup() {
     #zstyle ':prezto:module:editor:info:keymap:primary:insert' format 'I'
     #zstyle ':prezto:module:editor:info:keymap:primary' format '>>>'
     #zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format 'O'
-    zstyle ':prezto:module:editor:info:keymap:alternate' format ' %K{160}%F{231}NORMAL%f'
+    zstyle ':prezto:module:editor:info:keymap:alternate' format ' %K{160}%F{231}NORMAL%f%k'
     zstyle ':prezto:module:editor:info:completing' format '%F{160}...%f' 
        
-    prompt_lapure_editor_info=' %F{red}%${editor_info[keymap]}%f'
-
     # prompt turns red if the previous command didn't exit with 0
     PROMPT='%(?.%F{magenta}.%F{red})${PURE_PROMPT_SYMBOL:-❯}%f '
     RPROMPT='%${editor_info[keymap]}'

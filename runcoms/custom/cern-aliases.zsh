@@ -39,3 +39,5 @@ alias run2='export WORK_DIR=~/alicesw/run2/sw'
 
 alias run3='export WORK_DIR=~/alicesw/run3/sw'
 
+alias alibuild='~/alicesw/repos/alibuild/aliBuild'
+alias alienv='~/alicesw/repos/alibuild/aliEnv --shellrc'
