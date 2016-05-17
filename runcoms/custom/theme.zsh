@@ -34,7 +34,7 @@ function light() {
         osascript <<-EOF
         tell application "iTerm"
 	      tell current session of first window
-            set background image to (system attribute "HOME") & "/Pictures/Terminal Backgrounds/rainbow waves.jpg"
+            set background image to (system attribute "HOME") & "/Pictures/Terminal Backgrounds/hi tech texture.solarized.light.2.jpg"
 	      end tell
         end tell
 EOF
