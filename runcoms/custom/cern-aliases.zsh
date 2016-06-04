@@ -35,9 +35,7 @@ alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/boo
 
 export ALICE_ENV_DONT_UPDATE=1
 
-alias run2='export WORK_DIR=~/alicesw/run2/sw'
-
-alias run3='export WORK_DIR=~/alicesw/run3/sw'
+alias ali-run2='source ~/Scripts/alice-setenv.sh run2 '
+alias ali-run3='source ~/Scripts/alice-setenv.sh run3 '
 
 alias alibuild='~/alicesw/repos/alibuild/aliBuild'
-alias alienv='~/alicesw/repos/alibuild/aliEnv --shellrc'

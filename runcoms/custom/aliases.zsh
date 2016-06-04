@@ -82,3 +82,5 @@ alias canary="/Applications/Google\\ Chrome\\ Canary.app/Contents/MacOS/Google\\
 
 alias git="hub"
 
+alias hugo-serve="cd ~/Sites/github.io ; hugo serve -d dev --buildDrafts ."
+
