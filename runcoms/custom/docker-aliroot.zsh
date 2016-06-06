@@ -1,0 +1,108 @@
+#
+# some utility functions to work with AliRoot containers
+#
+
+ali_start_run2_container() {
+
+    # start a detached aliroot container, in x11 mode
+    #
+    # on input a number of bind mounted directories (ro) :
+    # - .globus to get the certificate for alien-token-init
+    # - alidist to get the build recipes
+    # - $what (either AliRoot or AliPhysics) to get the relevant source code
+    # - repos/$what as the previous one is a worktree from this one
+    #
+    # on "output" a single docker-managed volume containing the build
+    # and install directories (vc_run2_sw)
+    # (where vc_ denotes a Volume Container)
+    #
+
+    local what=$1
+    local whatlc=$what:l
+    local version=$2
+
+    drunx11 --interactive --tty --detach \
+        --name "$whatlc-$version" \
+        --env "ALI_WHAT=$what" \
+        --env "ALI_VERSION=$version" \
+        --hostname "$version" \
+        --volumes-from vc_run2_sw \
+        --volume $HOME/.globus:/root/.globus:ro \
+        --volume $HOME/alicesw/run2/$whatlc-$version/alidist:/alicesw/alidist:ro \
+        --volume $HOME/alicesw/run2/$whatlc-$version/$what:/alicesw/$what:ro \
+        --volume $HOME/alicesw/repos/$what:$HOME/alicesw/repos/$what:ro \
+        aphecetche/centos7-ali-core 
+
+}
+
+ali_setup_tmux() {
+
+    # setup, if it does not exist yet, a $whatlc-$version window
+    # in the current tmux session with the following layout :
+    #
+    # ---------------------------------------
+    # |                  |                  |
+    # |                  |                  |
+    # |                  | build dir in     |
+    # |                  | docker container |
+    # |                  | (pane 2)         |
+    # |                  |                  |
+    # |  local dir       |-------------------
+    # |  (pane 1)        |                  |
+    # |                  | exec dir in      |
+    # |                  | docker container |
+    # |                  | (pane 3)         |
+    # |                  |                  |
+    # ---------------------------------------
+    #
+
+    local what=$1
+    local whatlc=$what:l
+    local version=$2
+    local dir=$HOME/alicesw/run2/$whatlc-$version
+    local wname=$whatlc-$version
+    local pane_localedit=1
+    local pane_build=2
+    local pane_exec=3
+
+    tmux new-window -n $wname
+    tmux split-window -h -t $wname 
+    tmux split-window -v -t $wname.2
+
+    tmux send-keys -t $wname.$pane_exec "cd $dir; docker exec -it $wname /bin/bash" enter
+    tmux send-keys -t $wname.$pane_build "cd $dir; docker exec -it $wname /bin/bash" enter
+    tmux send-keys -t $wname.$pane_localedit "cd $dir/$what" enter
+
+    tmux send-keys -t $wname.$pane_build "cd /alicesw/sw/BUILD/$what-latest-$version/$what" enter
+
+    for pane in 1 2 3; do
+        tmux send-keys -t $wname.$pane "clear" enter
+    done
+
+    tmux send-keys -t $wname.$pane_build "pwd" enter
+}
+
+ali_docker() {
+    #
+    # run a container with the source locally on the Mac
+    # and the build/install in a managed docker container
+    # 
+    what=${1:="AliRoot"}
+    whatlc=$what:l
+
+    version=${2:="feature-reco-2016"}
+
+    if ! dexist "$whatlc-$version"; then
+        # connect to the existing container
+        ali_start_run2_container $what $version
+        sleep 2
+    fi
+
+    # setup the tmux layout if needed
+    if [[ $TMUX ]]; then
+        ali_setup_tmux $what $version
+    else
+        # simply connect to the container
+        docker exec -it $whatlc-$version /bin/bash
+    fi
+}

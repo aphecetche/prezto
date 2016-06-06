@@ -70,18 +70,27 @@ xquartz_if_not_running() {
         defaults write org.macosforge.xquartz.X11 app_to_run /usr/bin/true
     fi
 
-    netstat -an | grep 6000 &> /dev/null || open -a XQuartz
-#    while ! netstat -an | grep 6000 &> /dev/null; do
-#        sleep 2
-#    done
-    sleep 2
-    xhost + $(getmyip)
-    export DISPLAY=:0
+    # test if XQuartz has to be launched
+
+    if [[ "$(launchctl list | grep startx | cut -c 1)" == "-" ]]; then
+        open -a XQuartz
+        sleep 2
+        xhost + $(getmyip)
+    fi
 }
 
-alias xdrun="xquartz_if_not_running; docker run -it -e DISPLAY=$(getmyip):0 -v /tmp/.X11-unix:/tmp/.X11-unix "
+drunx11() {
+    xquartz_if_not_running 
+    docker run -e DISPLAY=$(getmyip):0 -v /tmp/.X11-unix:/tmp/.X11-unix $@
+}
 
 alias dvm="screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty"
 
-alias ali-docker="$HOME/github.com/aphecetche/docker-alicore/ali-docker.sh"
+dexist() {
+    # whether container exist or not
+    for d in $(docker inspect -f "{{ .Name }}" $(docker ps -q -a)); do
+        [[ "/$1" == "$d" ]] && return 0  
+    done
+    return 1 
+}
 
