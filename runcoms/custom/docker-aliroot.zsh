@@ -2,7 +2,7 @@
 # some utility functions to work with AliRoot containers
 #
 
-ali_start_run2_container() {
+ali_start_container() {
 
     # start a detached aliroot container, in x11 mode
     #
@@ -17,20 +17,23 @@ ali_start_run2_container() {
     # (where vc_ denotes a Volume Container)
     #
 
-    local what=$1
+    local run=$1
+    local what=$2
     local whatlc=$what:l
-    local version=$2
+    local version=$3
+    local extra=${4:=""}
 
     drunx11 --interactive --tty --detach \
         --name "$whatlc-$version" \
         --env "ALI_WHAT=$what" \
         --env "ALI_VERSION=$version" \
         --hostname "$version" \
-        --volumes-from vc_run2_sw \
+        --volume vc_${run}_sw:/alicesw/sw \
         --volume $HOME/.globus:/root/.globus:ro \
-        --volume $HOME/alicesw/run2/$whatlc-$version/alidist:/alicesw/alidist:ro \
-        --volume $HOME/alicesw/run2/$whatlc-$version/$what:/alicesw/$what:ro \
-        --volume $HOME/alicesw/repos/$what:$HOME/alicesw/repos/$what:ro \
+        --volume $HOME/alicesw/$run/$whatlc-$version/alidist:/alicesw/alidist:ro \
+        --volume $HOME/alicesw/$run/$whatlc-$version/$what:/alicesw/${what}:ro \
+        --volume $HOME/alicesw/repos/$what:$HOME/alicesw/repos/${what}:ro \
+        $extra \
         aphecetche/centos7-ali-core 
 
 }
@@ -56,10 +59,11 @@ ali_setup_tmux() {
     # ---------------------------------------
     #
 
-    local what=$1
+    local run=$1
+    local what=$2
     local whatlc=$what:l
-    local version=$2
-    local dir=$HOME/alicesw/run2/$whatlc-$version
+    local version=$3
+    local dir=$HOME/alicesw/$run/$whatlc-$version
     local wname=$whatlc-$version
     local pane_localedit=1
     local pane_build=2
@@ -87,22 +91,33 @@ ali_docker() {
     # run a container with the source locally on the Mac
     # and the build/install in a managed docker container
     # 
-    what=${1:="AliRoot"}
+    run=${1:="run2"}
+
+    what=${2:="AliRoot"}
+
     whatlc=$what:l
 
-    version=${2:="feature-reco-2016"}
+    version=${3:="feature-reco-2016"}
+
+    if ! test -d $HOME/alicesw/$run/$whatlc-$version/$what; then
+        echo "Directory $HOME/alicesw/$run/$whatlc-$version/$what does not exists !"
+        echo "The directories I know of in $run are :"
+        ls -d $HOME/alicesw/$run/*
+        return
+    fi
 
     if ! dexist "$whatlc-$version"; then
         # connect to the existing container
-        ali_start_run2_container $what $version
+        ali_start_container $run $what $version
         sleep 2
     fi
 
     # setup the tmux layout if needed
     if [[ $TMUX ]]; then
-        ali_setup_tmux $what $version
+        ali_setup_tmux $run $what $version
     else
         # simply connect to the container
         docker exec -it $whatlc-$version /bin/bash
     fi
 }
+

@@ -2,6 +2,9 @@
 # Docker alias and function
 # ------------------------------------
 
+# shortcut to docker-compose
+alias dc="docker-compose"
+
 # Get latest container ID
 alias dl="docker ps -l -q"
 
@@ -13,6 +16,15 @@ alias dpa="docker ps -a"
 
 # Get images
 alias di="docker images"
+
+# Remove dangling volumes
+# don't use as it would remove also non data-container-volumes,
+# i.e. the docker volumes that are supposed to be used from now
+# on as data volumes...
+#
+#drmv() {
+#    docker volume rm $(docker volume ls -qf dangling=true)
+#}
 
 # Get container IP
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
@@ -81,7 +93,7 @@ xquartz_if_not_running() {
 
 drunx11() {
     xquartz_if_not_running 
-    docker run -e DISPLAY=$(getmyip):0 -v /tmp/.X11-unix:/tmp/.X11-unix $@
+    docker run -e DISPLAY=$(getmyip):0 -v /tmp/.X11-unix:/tmp/.X11-unix -v /etc/localtime:/etc/localtime -e TZ="Europe/Paris" $@
 }
 
 alias dvm="screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty"
