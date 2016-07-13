@@ -38,4 +38,4 @@ export ALICE_ENV_DONT_UPDATE=1
 alias ali-run2='source ~/Scripts/alice-setenv.sh run2 '
 alias ali-run3='source ~/Scripts/alice-setenv.sh run3 '
 
-alias alibuild='~/alicesw/repos/alibuild/aliBuild'
+#alias alibuild='~/alicesw/repos/alibuild/aliBuild'

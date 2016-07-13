@@ -1,1 +1,0 @@
-/Users/laurent/github.com/aphecetche/docker-alice-online/alice-online-functions.sh
