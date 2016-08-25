@@ -109,7 +109,7 @@ docker_run_withX11() {
 
     case "$OSTYPE" in
         darwin*)
-            docker run -e DISPLAY=$(ali_getmyip):0 -v /tmp/.X11-unix:/tmp/.X11-unix -v /etc/localtime:/etc/localtime -e TZ="Europe/Paris" $@
+            docker run -e DISPLAY=$(dgetmyip):0 -v /tmp/.X11-unix:/tmp/.X11-unix -v /etc/localtime:/etc/localtime -e TZ="Europe/Paris" $@
             xhost +$(dgetmyip)
             ;;
         *)
