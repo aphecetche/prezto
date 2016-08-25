@@ -66,11 +66,16 @@ drm() {
     docker rm $(docker ps -q -f status=exited)
 }
 
-getmyip() { 
-    ifconfig en3 2> /dev/null | grep --color=auto inet | awk '$1=="inet" {print $2}' && ifconfig en0 2> /dev/null | grep --color=auto inet | awk '$1=="inet" {print $2}'
+dgetmyip() {
+
+    ip route get 8.8.8.8 | head -1 | cut -d' ' -f8
 }
 
-xquartz_if_not_running() {
+dxquartz_if_not_running() {
+    #
+    # check (and start if not running) that xquartz is
+    # running (MAC OSX ONLY)
+    #
     v_nolisten_tcp=$(defaults read org.macosforge.xquartz.X11 nolisten_tcp)
     v_xquartz_app=$(defaults read org.macosforge.xquartz.X11 app_to_run)
 
@@ -83,25 +88,46 @@ xquartz_if_not_running() {
     fi
 
     # test if XQuartz has to be launched
-
+    #
     if [[ "$(launchctl list | grep startx | cut -c 1)" == "-" ]]; then
         open -a XQuartz
         sleep 2
-        xhost + $(getmyip)
     fi
 }
 
-drunx11() {
-    xquartz_if_not_running 
-    docker run -e DISPLAY=$(getmyip):0 -v /tmp/.X11-unix:/tmp/.X11-unix -v /etc/localtime:/etc/localtime -e TZ="Europe/Paris" $@
+docker_run_withX11() {
+
+    # a wrapper to "docker run" to get X11 display working
+    # correctly
+
+    case "$OSTYPE" in
+        darwin*)
+            dxquartz_if_not_running
+            ;;
+    esac
+
+
+    case "$OSTYPE" in
+        darwin*)
+            docker run -e DISPLAY=$(ali_getmyip):0 -v /tmp/.X11-unix:/tmp/.X11-unix -v /etc/localtime:/etc/localtime -e TZ="Europe/Paris" $@
+            xhost +$(dgetmyip)
+            ;;
+        *)
+            docker run -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /etc/localtime:/etc/localtime -e TZ="Europe/Paris" $@
+            xhost + # fixme, there should be a better way...
+        ;;
+    esac
 }
+
 
 alias dvm="screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty"
 
 dexist() {
     # whether container exist or not
-    for d in $(docker inspect -f "{{ .Name }}" $(docker ps -q -a)); do
-        [[ "/$1" == "$d" ]] && return 0  
+    
+    for d in $(docker ps -q -a); do
+        name=$(docker inspect -f "{{ .Name }}" $d)
+        [[ "/$1" == "$name" ]] && return 0  
     done
     return 1 
 }

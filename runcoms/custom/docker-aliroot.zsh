@@ -23,7 +23,7 @@ ali_start_container() {
     local version=$3
     local extra=${4:=""}
 
-    drunx11 --interactive --tty --detach \
+    docker_run_withX11 --interactive --tty --detach \
         --name "$whatlc-$version" \
         --env "ALI_WHAT=$what" \
         --env "ALI_VERSION=$version" \
@@ -121,3 +121,8 @@ ali_docker() {
     fi
 }
 
+ali_cvmfs() {
+
+docker run --rm --interactive --tty --privileged aphecetche/centos7-ali-cvmfs
+
+}
