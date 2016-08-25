@@ -123,6 +123,6 @@ ali_docker() {
 
 ali_cvmfs() {
 
-docker run --rm --interactive --tty --privileged aphecetche/centos7-ali-cvmfs
+docker_run_withX11 --rm --interactive --tty --privileged -v $HOME/.globus:/root/.globus $@ aphecetche/centos7-ali-cvmfs
 
 }
