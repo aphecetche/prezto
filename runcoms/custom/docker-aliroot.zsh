@@ -123,6 +123,18 @@ ali_docker() {
 
 ali_cvmfs() {
 
-docker_run_withX11 --rm --interactive --tty --privileged -v $HOME/.globus:/root/.globus $@ aphecetche/centos7-ali-cvmfs
+    # first argument (required) is the XXX::VVV string to be used
+    # to issue the "alienv enter XXX::VVV" command at the
+    # container startup
+    #
+    # remaining arguments are passed to the docker command itself
+    # and can be used e.g. to bind mount more volumes
+    #
+    version=$1
+    if [ $# -gt 0 ]; then
+        shift
+    fi
+
+docker_run_withX11 --rm --interactive --tty --privileged -v $HOME/.globus:/root/.globus $@ aphecetche/centos7-ali-cvmfs $version
 
 }
