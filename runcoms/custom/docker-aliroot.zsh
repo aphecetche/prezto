@@ -21,7 +21,7 @@ ali_start_container() {
     local what=$2
     local whatlc=$what:l
     local version=$3
-    local extra=${4:=""}
+    shift 3
 
     docker_run_withX11 --interactive --tty --detach \
         --name "$whatlc-$version" \
@@ -33,7 +33,7 @@ ali_start_container() {
         --volume $HOME/alicesw/$run/$whatlc-$version/alidist:/alicesw/alidist:ro \
         --volume $HOME/alicesw/$run/$whatlc-$version/$what:/alicesw/${what}:ro \
         --volume $HOME/alicesw/repos/$what:$HOME/alicesw/repos/${what}:ro \
-        $extra \
+        $@ \
         aphecetche/centos7-ali-core 
 
 }
@@ -99,6 +99,8 @@ ali_docker() {
 
     version=${3:="feature-reco-2016"}
 
+    shift 3
+
     if ! test -d $HOME/alicesw/$run/$whatlc-$version/$what; then
         echo "Directory $HOME/alicesw/$run/$whatlc-$version/$what does not exists !"
         echo "The directories I know of in $run are :"
@@ -107,8 +109,9 @@ ali_docker() {
     fi
 
     if ! dexist "$whatlc-$version"; then
-        # connect to the existing container
-        ali_start_container $run $what $version
+        # start a new container 
+        echo "trailing arguments passed as is : $@"
+        ali_start_container $run $what $version $@
         sleep 2
     fi
 
