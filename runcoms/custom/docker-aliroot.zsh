@@ -141,3 +141,8 @@ ali_cvmfs() {
 docker_run_withX11 --rm --interactive --tty --privileged -v $HOME/.globus:/root/.globus $@ aphecetche/centos7-ali-cvmfs $version
 
 }
+
+ali_root6() 
+{
+    docker_run_withX11 --env "ALI_WHAT=ROOT" --env "ALI_VERSION=dev-o2-daq" --interactive --tty --volume vc_run3_sw:/alicesw/sw $@ aphecetche/centos7-ali-core
+}
