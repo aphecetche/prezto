@@ -18,13 +18,11 @@ alias dpa="docker ps -a"
 alias di="docker images"
 
 # Remove dangling volumes
-# don't use as it would remove also non data-container-volumes,
-# i.e. the docker volumes that are supposed to be used from now
-# on as data volumes...
-#
-#drmv() {
-#    docker volume rm $(docker volume ls -qf dangling=true)
-#}
+# but exclude from the purge everything starting with vc_ 
+# i.e. the ones I created explicitely
+drmv() {
+    docker volume rm $(docker volume ls -qf dangling=true | grep -v "^vc_")
+}
 
 # Get container IP
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
