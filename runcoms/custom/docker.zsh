@@ -107,12 +107,12 @@ docker_run_withX11() {
 
     case "$OSTYPE" in
         darwin*)
-            docker run -e DISPLAY=$(dgetmyip):0 -v /tmp/.X11-unix:/tmp/.X11-unix -v /etc/localtime:/etc/localtime -e TZ="Europe/Paris" $@
             xhost +$(dgetmyip)
+            docker run -e DISPLAY=$(dgetmyip):0 -v /tmp/.X11-unix:/tmp/.X11-unix -v /etc/localtime:/etc/localtime -e TZ="Europe/Paris" $@
             ;;
         *)
-            docker run -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /etc/localtime:/etc/localtime -e TZ="Europe/Paris" $@
             xhost + # fixme, there should be a better way...
+            docker run -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /etc/localtime:/etc/localtime -e TZ="Europe/Paris" $@
         ;;
     esac
 }

@@ -138,7 +138,7 @@ ali_cvmfs() {
         shift
     fi
 
-docker_run_withX11 --rm --interactive --tty --privileged -v $HOME/.globus:/root/.globus $@ aphecetche/centos7-ali-cvmfs $version
+docker_run_withX11 --rm --interactive --tty --privileged -v $HOME/.globus:/root/.globus -v $HOME/.rootrc:/root/.rootrc $@ aphecetche/centos7-ali-cvmfs $version
 
 }
 
