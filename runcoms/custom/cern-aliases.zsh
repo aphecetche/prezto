@@ -1,8 +1,4 @@
 
-alias ali='source ~/alicesw/alice-env.sh'
-
-alias alice-installer='bash <(curl -fsSL http://alien.cern.ch/alice-installer)'
-
 alias ll='ls -al'
 
 alias token='alien-token-init laphecet'
@@ -32,12 +28,6 @@ alias dhcp-start='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/boot
 
 alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
 
-
-export ALICE_ENV_DONT_UPDATE=1
-
-#alias ali-run2='source ~/Scripts/alice-setenv.sh run2 '
-#alias ali-run3='source ~/Scripts/alice-setenv.sh run3 '
-
-#alias alibuild='~/alicesw/repos/alibuild/aliBuild'
-
 alias ali="alienv -w $HOME/alicesw/run2/sw enter ROOT/latest --shellrc"
+
+alias aliphysics="alienv -w $HOME/alicesw/run2/sw enter AliPhysics/latest --shellrc"
