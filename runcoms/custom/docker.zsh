@@ -132,8 +132,5 @@ dexist() {
 
 dvim() {
     # the port 1337 is for livedown (markdown preview)
-#docker run -it --rm -v "$PWD:$PWD" -w "$PWD" -p 1337:1337 -e BACKGROUND=dark -e THEME=base16-tomorrow --entrypoint /usr/local/bin/nvim aphecetche/alpine-neovim-p3 $@
-#docker run -it --rm -v "$PWD:$PWD" -w "$PWD" -p 1337:1337 -e BACKGROUND=$BACKGROUND -e THEME=$THEME --entrypoint /usr/local/bin/nvim aphecetche/alpine-neovim-p3 $@
-docker run -it --rm -v "$PWD:$PWD" -w "$PWD" -p 1337:1337 -e BACKGROUND=light -e THEME=base16-solarized-light aphecetche/neovim-o2 nvim $@
-
+    docker run -it --rm -v "$PWD:$PWD" -w "$PWD" -p 1337:1337 -e BACKGROUND=light -e THEME=base16-solarized-light alpine-vim $@
 }
