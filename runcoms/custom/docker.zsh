@@ -131,6 +131,5 @@ dexist() {
 }
 
 dvim() {
-    # the port 1337 is for livedown (markdown preview)
-    docker run -it --rm -v "$PWD:$PWD" -w "$PWD" -p 1337:1337 -e BACKGROUND=light -e THEME=base16-solarized-light alpine-vim $@
+    docker run -it --rm -v "$PWD:$PWD" -w "$PWD" -e BACKGROUND=light -e THEME=base16-solarized-light alpine-vim $@
 }
