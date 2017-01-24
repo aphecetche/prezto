@@ -18,13 +18,7 @@ source $BASE16_SHELL
 function light() {
 	\rm ~/.zsh-ui-background
 	echo "light" > ~/.zsh-ui-background && reload!
-	# if grep -q "set nonumber" ~/.vimrc;then
-	# 	echo "vimrc has nonumber"
-	# 	sed -i '' s/"set nonumber"/"set number"/ ~/dotfiles/config/nvim/init.vim
-	# elif grep -q "set number" ~/.vimrc;then
-	# 	echo "vimrc has number"
-	# 	sed -i '' s/"set number"/"set nonumber"/ ~/dotfiles/config/nvim/init.vim
-	# fi
+    local image="hi tech texture.solarized.light.2.jpg"
 	if [[ -n "$TMUX" ]]; then
 	tmux set-environment -g BACKGROUND $BACKGROUND
 	tmux set-environment -g THEME $THEME
@@ -34,16 +28,21 @@ function light() {
         osascript <<-EOF
         tell application "iTerm"
 	      tell current session of first window
-            set background image to (system attribute "HOME") & "/Pictures/Terminal Backgrounds/hi tech texture.solarized.light.2.jpg"
+            set background image to (system attribute "HOME") & "/Pictures/Terminal Backgrounds/$image"
 	      end tell
         end tell
 EOF
+    fi
+    if [ "$TERMINAL" = "termite" ]; then
+        # probably under I3 on Arch...
+        feh --bg-fill "$HOME/Pictures/Terminal Backgrounds/$image"
     fi
 }
 
 function dark() {
 	\rm ~/.zsh-ui-background
     echo "dark" > ~/.zsh-ui-background && reload!
+    local image="atlantis nebula.jpg"
 	if [[ -n "$TMUX" ]]; then
 	  tmux set-environment -g BACKGROUND $BACKGROUND
 	  tmux set-environment -g THEME $THEME
@@ -53,10 +52,14 @@ function dark() {
         osascript <<-EOF
         tell application "iTerm"
 	      tell current session of first window
-          set background image to (system attribute "HOME") & "/Pictures/Terminal Backgrounds/hi tech texture.solarized.dark.jpg"
+          set background image to (system attribute "HOME") & "/Pictures/Terminal Backgrounds/$image"
           end tell
         end tell
 EOF
+    fi
+    if [ "$TERMINAL" = "termite" ]; then
+        # probably under I3 on Arch...
+        feh --bg-fill "$HOME/Pictures/Terminal Backgrounds/$image"
     fi
 }
 
