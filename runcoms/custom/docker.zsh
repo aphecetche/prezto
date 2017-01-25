@@ -131,5 +131,5 @@ dexist() {
 }
 
 dvim() {
-    docker run -it --rm -v "$PWD:$PWD" -w "$PWD" -e BACKGROUND=light -e THEME=base16-solarized-light alpine-vim $@
+    docker run -it --rm -v "$PWD:$PWD" -w "$PWD" alpine-vim $@
 }

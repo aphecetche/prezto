@@ -1,28 +1,23 @@
 # Setting the theme
-if [ -f ~/.zsh-ui-background ]; then
-	export BACKGROUND=$(cat ~/.zsh-ui-background)
-else
-	export BACKGROUND="dark"
-fi
-if [ -f ~/.zsh-ui-theme ]; then
-	export THEME=$(cat ~/.zsh-ui-theme)
-else
-	export THEME="base16-solarized"
-fi
 
-BASE16_SHELL="$DOTFILES/base16-shell/$THEME.$BACKGROUND.sh"
-# [[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
-source $BASE16_SHELL
+# BASE16_SHELL="$DOTFILES/base16-shell/scripts/$THEME.sh"
+# # [[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
+# if ! [ -n "$ITERM_SESSION_ID" ]; then
+#     source $BASE16_SHELL
+# fi
 
-# set the background color to light
-function light() {
-	\rm ~/.zsh-ui-background
-	echo "light" > ~/.zsh-ui-background && reload!
-}
+# Change iTerm2 color profile from the CLI
+function it2prof() { 
+    if [ "$(uname)" = "Darwin" ]; then
+        sequence="\033]1337;SetProfile=$1\a"
 
-function dark() {
-	\rm ~/.zsh-ui-background
-    echo "dark" > ~/.zsh-ui-background && reload!
+        if [ -n "$TMUX" ]; then
+            # Tell tmux to pass the escape sequences through
+            # see e.g. http://linsam.homelinux.com/tmux/tmuxcodes.pdf
+            sequence="\033Ptmux;\033$sequence\033\\"
+        fi
+        echo -e $sequence
+    fi
 }
 
 # print available colors and their numbers
