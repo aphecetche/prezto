@@ -18,49 +18,11 @@ source $BASE16_SHELL
 function light() {
 	\rm ~/.zsh-ui-background
 	echo "light" > ~/.zsh-ui-background && reload!
-    local image="hi tech texture.solarized.light.2.jpg"
-	if [[ -n "$TMUX" ]]; then
-	tmux set-environment -g BACKGROUND $BACKGROUND
-	tmux set-environment -g THEME $THEME
-	tmux source-file ~/.tmux.conf
-	fi
-    if [[ -n "$ITERM_SESSION_ID" ]]; then
-        osascript <<-EOF
-        tell application "iTerm"
-	      tell current session of first window
-            set background image to (system attribute "HOME") & "/Pictures/Terminal Backgrounds/$image"
-	      end tell
-        end tell
-EOF
-    fi
-    if [ "$TERMINAL" = "termite" ]; then
-        # probably under I3 on Arch...
-        feh --bg-fill "$HOME/Pictures/Terminal Backgrounds/$image"
-    fi
 }
 
 function dark() {
 	\rm ~/.zsh-ui-background
     echo "dark" > ~/.zsh-ui-background && reload!
-    local image="atlantis nebula.jpg"
-	if [[ -n "$TMUX" ]]; then
-	  tmux set-environment -g BACKGROUND $BACKGROUND
-	  tmux set-environment -g THEME $THEME
-	  tmux source-file ~/.tmux.conf 
-	fi
-    if [[ -n "$ITERM_SESSION_ID" ]]; then
-        osascript <<-EOF
-        tell application "iTerm"
-	      tell current session of first window
-          set background image to (system attribute "HOME") & "/Pictures/Terminal Backgrounds/$image"
-          end tell
-        end tell
-EOF
-    fi
-    if [ "$TERMINAL" = "termite" ]; then
-        # probably under I3 on Arch...
-        feh --bg-fill "$HOME/Pictures/Terminal Backgrounds/$image"
-    fi
 }
 
 # print available colors and their numbers
