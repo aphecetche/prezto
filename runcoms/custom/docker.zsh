@@ -131,5 +131,5 @@ dexist() {
 }
 
 dvim() {
-    docker run -it --rm -v "$PWD:$PWD" -w "$PWD" -e BASE16_THEME=$BASE16_THEME -v "$HOME/.vimrc_background":"$HOME/.vimrc_background" dvim-$USER $@
+    docker run -it --rm -e BASE16_THEME=$BASE16_THEME -v "$HOME/.vimrc_background":"$HOME/.vimrc_background" dvim-$USER $@
 }
