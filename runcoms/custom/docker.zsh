@@ -130,6 +130,34 @@ dexist() {
     return 1 
 }
 
+getdirlist() {
+    for par in $@; do
+        if test -G $par; then
+            dir=$(unset CDPATH && cd "$(dirname $par)" && pwd) #|| continue 
+            echo "$dir" 
+        fi 
+    done 
+}
+
 dvim() {
-    docker run -it --rm -v "$PWD":"$PWD" -w "$PWD" -e BASE16_THEME=$BASE16_THEME -v "$HOME/.vimrc_background":"$HOME/.vimrc_background" dvim-$USER $@
+
+	# must get a list of basedirs in order to insure we are
+	# mounting them in the container
+
+	firstdir=""
+	cmd="docker run -it --rm -e BASE16_THEME=$BASE16_THEME "
+
+	for dir in $(getdirlist $@ | sort | uniq); do
+		cmd="$cmd -v $dir:$dir"
+		if [ -n $firstdir ]; then
+			firstdir="$dir"
+			cmd="$cmd -w $firstdir"
+		fi
+	done
+
+	cmd="$cmd dvim-$USER $@"
+	eval $cmd
+	unset dir
+	unset firstdir
+	unset cmd
 }
