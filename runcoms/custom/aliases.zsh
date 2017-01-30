@@ -66,7 +66,5 @@ alias git="hub"
 
 alias hugo-serve="cd ~/Sites/github.io ; hugo serve -d dev --buildDrafts ."
 
-command -v vim > /dev/null 2>&1 || {
-    # if vim is not installed then use dockerized vim
-    alias vim="dvim"
-}
+alias e="dvim"
+
