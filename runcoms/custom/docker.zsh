@@ -155,8 +155,23 @@ dvim() {
 		fi
 	done
 
+    if test -n "$DVIM_LIVEDOWN_PORT"; then
+        cmd="$cmd -p $DVIM_LIVEDOWN_PORT:$DVIM_LIVEDOWN_PORT"
+    fi
+    if test -n "$DVIM_YCM_EXTRA_CONF"; then
+        cmd="$cmd -v $DVIM_YCM_EXTRA_CONF:$HOME/.ycm_extra_conf.py"
+    fi
+    if test -n "$DVIM_DOCKER"; then
+        # docker options passed "as is"
+        cmd="$cmd $DVIM_DOCKER"
+    fi
 	cmd="$cmd dvim-$USER $@"
-	eval $cmd
+
+    if test -n "$DVIM_DEBUG"; then
+        echo "cmd=$cmd"
+    else
+        eval $cmd
+    fi
 	unset dir
 	unset firstdir
 	unset cmd
