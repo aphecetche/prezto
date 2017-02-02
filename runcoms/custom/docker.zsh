@@ -17,11 +17,83 @@ alias dpa="docker ps -a"
 # Get images
 alias di="docker images"
 
+# Show volumes
+alias dv="docker volume ls"
+
 # Remove dangling volumes
 # but exclude from the purge everything starting with vc_ 
 # i.e. the ones I created explicitely
 drmv() {
     docker volume rm $(docker volume ls -qf dangling=true | grep -v "^vc_")
+}
+
+dvscp() {
+    # copy a docker volume to another host
+    #docker run --rm -v <SOURCE_DATA_VOLUME_NAME>:/from alpine ash -c "cd /from ; tar -cf - . " | ssh <TARGET_HOST> 'docker run --rm -i -v <TARGET_DATA_VOLUME_NAME>:/to alpine ash -c "cd /to ; tar -xvf - " '
+}
+
+
+dvarchive() {
+    # make a tar.gz of a docker volume
+    local volume_name=$1
+
+    $(docker volume ls | grep $volume_name 2>&1 > /dev/null) \
+        && \
+        { 
+            docker run -it --rm -v $volume_name:/data -v $(pwd):/backup alpine:3.5 tar zcvf /backup/$volume_name.tar.gz /data \
+                && printf "%s\\n" "archive $volume_name.tar.gz successfully created" \
+                || printf "%s\\n" "could not create archive $volume_name"
+        } \
+            || \
+            printf "%s\\n" "volume $volume_name does not exist. Can not archive it !"
+}
+
+dvclone() {
+    # clone a volume into another one
+    # inspired from https://github.com/gdiepen/docker-convenience-scripts
+
+    #First check if the user provided all needed arguments
+    if [ "$1" = "" ]
+    then
+        echo "Please provide a source volume name"
+        exit
+    fi
+
+    if [ "$2" = "" ] 
+    then
+        echo "Please provide a destination volume name"
+        exit
+    fi
+
+    #Check if the source volume name does exist
+    docker volume inspect $1 > /dev/null 2>&1
+    if [ "$?" != "0" ]
+    then
+        echo "The source volume \"$1\" does not exist"
+        exit
+    fi
+
+    #Now check if the destinatin volume name does not yet exist
+    docker volume inspect $2 > /dev/null 2>&1
+
+    if [ "$?" = "0" ]
+    then
+        echo "The destination volume \"$2\" already exists"
+        exit
+    fi
+
+
+
+    echo "Creating destination volume \"$2\"..."
+    docker volume create --name $2  
+    echo "Copying data from source volume \"$1\" to destination volume \"$2\"..."
+    docker run --rm \
+        -i \
+        -t \
+        -v $1:/from \
+        -v $2:/to \
+        alpine:3.5 ash -c "cd /to ; cp -a /from/* ."
+
 }
 
 # Get container IP
