@@ -32,3 +32,11 @@ function colours() {
     done
 }
 
+# change the (base16) theme 
+# must give the name of the theme without the base16- prefix
+function change_theme() {
+    . $BASE16_SHELL/scripts/base16-$1.sh
+    ln -sf $BASE16_SHELL/scripts/base16-$1.sh $HOME/.base16_theme
+    # it2prof base16-$1 # (not needed ?)
+    test -f $HOME/.Xresources.d/base16-$1 && xrdb -merge $HOME/.Xresources.d/base16-$1
+}
