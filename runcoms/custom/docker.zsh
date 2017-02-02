@@ -33,7 +33,7 @@ dvscp() {
 }
 
 
-dvarchive() {
+dvolume2archive() {
     # make a tar.gz of a docker volume
     local volume_name=$1
 
@@ -46,6 +46,25 @@ dvarchive() {
         } \
             || \
             printf "%s\\n" "volume $volume_name does not exist. Can not archive it !"
+}
+
+darchive2volume() {
+    # reverse operation from dvolume2archive : take an archive and populate
+    # a volume with it
+    # will fail if the target volume already exist !
+
+    local volume_name=$2
+
+    local archive_dir=$(dirname $1)
+    local archive=$(basename $1)
+
+    $(docker volume ls | grep $volume_name > /dev/null 2>&1)
+
+    if [ $? = 0 ]; then 
+        printf "%s\\n" "volume $volume_name already exists ! will not overwrite it !"
+    else
+        docker run -it --rm -v $volume_name:/dest -v $archive_dir:/src alpine:3.5 tar -zxvf /src/$archive -C /dest
+    fi
 }
 
 dvclone() {
