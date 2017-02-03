@@ -24,6 +24,10 @@ alias ssh='TERM=xterm-256color ssh'
 
 export PATH=$PATH:$HOME/bin
 
+# PURE_GIT_SYMBOL="  "
+# PURE_GIT_UP_ARROW="  "
+# PURE_GIT_DOWN_ARROW="  "
+
 export VISUAL=vim
 export EDITOR=vim
 
