@@ -132,8 +132,12 @@ prompt_lapure_preprompt_render() {
 
     # construct preprompt, beginning with path
     local preprompt="%F{blue}%~%f"
+    local git_symbol=""
+
+    [[ "$vcs_info_msg_0_" != '' ]] && git_symbol="  "
+
     # git info
-    preprompt+="%F{$git_color}${vcs_info_msg_0_}${prompt_lapure_git_dirty}%f"
+    preprompt+="%F{$git_color}${git_symbol}${vcs_info_msg_0_}${prompt_lapure_git_dirty}%f"
     # git pull/push arrows
     preprompt+="%F{cyan}${prompt_lapure_git_arrows}%f"
     # username and machine if applicable
