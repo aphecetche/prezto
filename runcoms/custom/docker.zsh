@@ -223,9 +223,9 @@ dexist() {
 
 getdirlist() {
     for par in $@; do
-        if test -G $par; then
-            dir=$(unset CDPATH && cd "$(dirname $par)" && pwd) #|| continue 
-            echo "$dir" 
+        abs_path=$(unset CDPATH && cd $(dirname $par) && pwd)
+        if test -G $abs_path; then
+            echo "$abs_path"
         fi 
     done 
 }
@@ -256,7 +256,12 @@ dvim() {
         # docker options passed "as is"
         cmd="$cmd $DVIM_DOCKER"
     fi
-	cmd="$cmd dvim-$USER $@"
+
+    cmd="$cmd dvim-$USER"
+    for par in $@; do
+        abs_path=$(cd $(dirname $par); pwd)
+        cmd="$cmd $abs_path/$(basename $par)"
+    done
 
     if test -n "$DVIM_DEBUG"; then
         echo "cmd=$cmd"
