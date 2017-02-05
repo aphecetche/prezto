@@ -271,4 +271,5 @@ dvim() {
 	unset dir
 	unset firstdir
 	unset cmd
+    unset abs_path
 }
