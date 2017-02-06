@@ -18,7 +18,7 @@ alias gscp='gsiscp -S `which gsissh` -P 1975'
 alias saf3-enter='source $HOME/Scripts/saf3.sh enter'
 alias saf3='source $HOME/Scripts/saf3.sh'
 
-alias o2-dev='. ~/github.com/aphecetche/docker-alice-dev/init.sh && cd ~/alicesw/run3/o2-dev'
+alias o2-dev='. ~/github.com/aphecetche/docker-alice-dev/init.sh'
 
 alias cvmfs='source $HOME/Scripts/cvmfs.sh'
 
