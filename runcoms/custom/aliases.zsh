@@ -64,7 +64,12 @@ alias canary="/Applications/Google\\ Chrome\\ Canary.app/Contents/MacOS/Google\\
 
 alias git="hub"
 
-alias hugo-serve="cd ~/Sites/github.io ; hugo serve -d dev --buildDrafts ."
-
 alias e="dvim"
+
+alias g='DVIM_GO=1 dvim'
+
+# the nice trick with the TERM=tmux-256color-italic
+# is fine for local terminals, but not for remote ones, for
+# which we want the 'normal' xterm-256color 
+alias ssh='TERM=xterm-256color ssh'
 

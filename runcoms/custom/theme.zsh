@@ -1,10 +1,8 @@
 # Setting the theme
 
-# BASE16_SHELL="$DOTFILES/base16-shell/scripts/$THEME.sh"
-# # [[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
-# if ! [ -n "$ITERM_SESSION_ID" ]; then
-#     source $BASE16_SHELL
-# fi
+# PURE_GIT_SYMBOL="  "
+# PURE_GIT_UP_ARROW="  "
+# PURE_GIT_DOWN_ARROW="  "
 
 # Change iTerm2 color profile from the CLI
 function it2prof() { 
@@ -35,10 +33,20 @@ function colours() {
 # change the (base16) theme 
 # must give the name of the theme without the base16- prefix
 function change_theme() {
-    . $BASE16_SHELL/scripts/base16-$1.sh
-    \ln -sf $BASE16_SHELL/scripts/base16-$1.sh $HOME/.base16_theme
+    if [ $# -gt 0 ]; then
+        theme=$1
+    else
+        theme="$(basename $(readlink $HOME/.base16_theme))"
+        theme=${theme/base16-/}
+        theme=${theme/.sh/}
+    fi
+    . $HOME/dotfiles/base16-shell/scripts/base16-$theme.sh
+    \ln -sf $HOME/dotfiles/base16-shell/scripts/base16-$theme.sh $HOME/.base16_theme
     # change Xresources 
-    test -f $HOME/.Xresources.d/base16-$1 && xrdb -merge $HOME/.Xresources.d/base16-$1
+    test -f $HOME/.Xresources.d/base16-$theme && xrdb -merge $HOME/.Xresources.d/base16-$theme
+    test -f $HOME/dotfiles/config/tmux/base16-$theme.sh && . $HOME/dotfiles/config/tmux/base16-$theme.sh
     # reload tmux configuration if under tmux
-    test -z $TMUX || tmux source ~/.tmux.conf 
+    if test -n "$TMUX"; then
+        tmux source ~/.tmux.conf
+    fi
 }

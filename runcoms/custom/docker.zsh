@@ -223,10 +223,7 @@ dexist() {
 
 getdirlist() {
     for par in $@; do
-        abs_path=$(unset CDPATH && cd $(dirname $par) && pwd)
-        if test -G $abs_path; then
-            echo "$abs_path"
-        fi 
+        abs_path=$(unset CDPATH && cd "$(dirname $par)" > /dev/null 2>&1 && pwd) && printf "\"%s\"\\n" $abs_path
     done 
 }
 
@@ -239,11 +236,13 @@ dvim() {
 	cmd="docker run -it --rm -e BASE16_THEME=$BASE16_THEME "
 
 	for dir in $(getdirlist $@ | sort | uniq); do
-		cmd="$cmd -v $dir:$dir"
-		if [ -n $firstdir ]; then
-			firstdir="$dir"
-			cmd="$cmd -w $firstdir"
-		fi
+        # printf "%s\\n" "dir=$dir"
+		 cmd="$cmd -v \"$dir\":\"$dir\""
+        # printf "%s\n" "cmd=$cmd"
+		 if [ -n "$firstdir" ]; then
+		 	firstdir="$dir"
+		 	cmd="$cmd -w $firstdir"
+		 fi
 	done
 
     if test -n "$DVIM_LIVEDOWN_PORT"; then
@@ -256,11 +255,12 @@ dvim() {
         # docker options passed "as is"
         cmd="$cmd $DVIM_DOCKER"
     fi
-
+    if test -n "$DVIM_GO"; then
+        cmd="$cmd -v vc_go_tools:/go -e GOPATH=$GOPATH -v $GOPATH:$GOPATH"
+    fi
     cmd="$cmd dvim-$USER"
     for par in $@; do
-        abs_path=$(cd $(dirname $par); pwd)
-        cmd="$cmd $abs_path/$(basename $par)"
+        abs_path=$(cd $(dirname "$par") > /dev/null 2>&1 && pwd) && cmd="$cmd \"$abs_path/$(basename $par)\"" || ( touch $par && cmd="$cmd \"$abs_path/$(basename $par)\"")
     done
 
     if test -n "$DVIM_DEBUG"; then
@@ -273,3 +273,16 @@ dvim() {
 	unset cmd
     unset abs_path
 }
+
+
+dhugo()
+{
+    docker run -p 1313:1313 -v $(pwd):/src jojomi/hugo:0.15 hugo $@
+}
+
+dhugo-serve()
+{
+    cd ~/Sites/github.io && dhugo serve --bind 0.0.0.0 /src --buildDrafts
+}
+
+
