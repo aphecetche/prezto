@@ -28,6 +28,10 @@ alias dhcp-start='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/boot
 
 alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
 
-alias ali="alienv -w $HOME/alicesw/run2/sw enter ROOT/latest --shellrc"
+alias alienv="alienv -w $HOME/alice/sw"
 
-alias aliphysics="alienv -w $HOME/alicesw/run2/sw enter AliPhysics/latest --shellrc"
+alias root5="alienv enter ROOT/latest-ali-master-release --shellrc"
+alias root6="alienv enter ROOT/latest-o2-ref-o2 --shellrc"
+alias alireco="alienv enter AliRoot/latest-ali-reco-2017-release --shellrc"
+
+alias aliphysics="alienv enter AliPhysics/latest-ali-physics-master-release --shellrc"

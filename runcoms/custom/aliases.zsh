@@ -73,3 +73,5 @@ alias g='DVIM_GO=1 dvim'
 # which we want the 'normal' xterm-256color 
 alias ssh='TERM=xterm-256color ssh'
 
+alias t='todo.sh'
+alias tw='todo.sh list -@home -later -mac'

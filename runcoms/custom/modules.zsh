@@ -3,3 +3,4 @@
 
 source /usr/local/opt/modules/Modules/init/zsh
 
+module load use.own
