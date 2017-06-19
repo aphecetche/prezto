@@ -50,3 +50,7 @@ function change_theme() {
         tmux source ~/.tmux.conf
     fi
 }
+
+export GREP_COLOR="30;43"
+export GREP_COLORS="mt=30;43"
+
