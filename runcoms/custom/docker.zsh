@@ -282,7 +282,7 @@ dhugo()
 
 dhugo-serve()
 {
-    cd ~/Sites/github.io && dhugo serve --bind 0.0.0.0 /src --buildDrafts
+    cd ~/Mind/@Archive/2017/github.io && dhugo serve --bind 0.0.0.0 /src --buildDrafts
 }
 
 
