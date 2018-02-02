@@ -1,6 +1,7 @@
 #!/bin/sh
 # initialize the Environment Modules (http://modules.sourceforge.net)
 
-source /usr/local/opt/modules/Modules/init/zsh
+source /usr/local/opt/modules/init/zsh
 
-module load use.own
+module use $HOME/privatemodules
+
