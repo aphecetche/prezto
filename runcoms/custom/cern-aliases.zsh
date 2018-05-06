@@ -27,11 +27,4 @@ alias ks='screen -ls | grep -o "[0-9]\{5\}" | awk "{print $1}"| xargs -I{} scree
 alias dhcp-start='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
 
 alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
-
-alias alienv="alienv -w $HOME/alice/sw"
-
-alias root5="alienv enter ROOT/latest-ali-master-release --shellrc"
-alias root6="alienv enter ROOT/latest-o2-ref-o2 --shellrc"
-alias alireco="alienv enter AliRoot/latest-ali-reco-2017-release --shellrc"
-
-alias aliphysics="alienv enter AliPhysics/latest-ali-physics-master-release --shellrc"
+ 

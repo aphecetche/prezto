@@ -10,7 +10,7 @@ cvmfs_repo() {
 cvmfs_alice_repos() {
 # add more cvmfs repositories if you need below _without_ the starting /cvmfs
 
-cvmfs_repos="alice.cern.ch alice-ocdb.cern.ch alice-nightlies.cern.ch"
+cvmfs_repos="alice.cern.ch alice-ocdb.cern.ch alice-nightlies.cern.ch sft.cern.ch sft-nightlies.cern.ch"
 
 # sudo cvmfs_config umount
 
