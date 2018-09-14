@@ -6,6 +6,5 @@ tmux_start()
     else
         export TMUX_HOST_ICON=''
     fi
-    change_theme $1
     tmux -2
 }

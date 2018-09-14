@@ -66,10 +66,6 @@ alias canary="/Applications/Google\\ Chrome\\ Canary.app/Contents/MacOS/Google\\
 
 alias git="hub"
 
-alias e="dvim"
-
-alias g='DVIM_GO=1 dvim'
-
 # the nice trick with the TERM=tmux-256color-italic
 # is fine for local terminals, but not for remote ones, for
 # which we want the 'normal' xterm-256color 
@@ -77,3 +73,6 @@ alias ssh='TERM=xterm-256color ssh'
 
 alias t='todo.sh'
 alias tw='todo.sh list -@home -later -mac'
+
+alias c='code-insiders'
+
